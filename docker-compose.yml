@@ -1,0 +1,29 @@
+version: "3.0"
+
+networks:
+  gtest-integtest-network:
+    driver: bridge
+
+services:
+  db:
+    image: postgres:12.5
+    networks:
+      - gtest-integtest-network
+    ports:
+      - 15432
+    expose:
+      - 15432
+    env_file:
+      - .test.env
+    command: -p 15432
+
+  code:
+    build:
+      context: .
+      dockerfile: Dockerfile.integ
+    networks:
+      - gtest-integtest-network
+    env_file:
+      - .test.env
+    links:
+      - db

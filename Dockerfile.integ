@@ -1,0 +1,5 @@
+FROM golang:1.16-buster
+RUN apt update && apt upgrade -y && apt install -y make gcc
+COPY . /src
+WORKDIR /src
+CMD ["make", "integration-test"]
