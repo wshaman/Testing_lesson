@@ -15,11 +15,19 @@ func Register(d *db.DB, name string) (*models.User, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to register user")
 	}
+	nameUniq, err := getNextNameAvailable(d, eml)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get new name for user")
+	}
+	emlUniq, err := naming.AddDomain(nameUniq)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get new name for user")
+	}
 	m := &models.User{
-		Email: eml,
+		Email: emlUniq,
 		Name:  name,
 	}
-	if err = models.UserSave(d, m); err != nil {
+	if err = models.Query.UserSave(d, m); err != nil {
 		return nil, errors.Wrap(err, "failed to register user")
 	}
 	return m, nil
@@ -30,7 +38,7 @@ func getNextNameAvailable(d *db.DB, eml string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to parse email")
 	}
-	users, err := models.UserListEmailLike(d, namePart)
+	users, err := models.Query.UserListEmailLike(d, namePart)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to find users")
 	}

@@ -126,7 +126,7 @@ func TestOne(t *testing.T) {
 		require.NoError(t, err)
 		assert.Equal(t, v.OutEmail, u.Email)
 	}
-	users, err := models.UserList(it.Db)
+	users, err := models.Query.UserList(it.Db)
 	require.NoError(t, err)
 	assert.Equal(t, len(testdata.CrewData), len(users))
 }
@@ -138,7 +138,7 @@ func TestTwo(t *testing.T) {
 		_, err := user.Register(it.Db, v.InName)
 		require.NoError(t, err)
 	}
-	users, err := models.UserList(it.Db)
+	users, err := models.Query.UserList(it.Db)
 	require.NoError(t, err)
 	assert.Equal(t, len(testdata.CrewData), len(users))
 }

@@ -46,6 +46,13 @@ func NameToEmail(name string) (eml string, err error) {
 	return eml, nil
 }
 
+func AddDomain(namePart string) (eml string, err error) {
+	if eml, err = addDomain(namePart, "acme.com"); err != nil {
+		return "", errors.Wrap(err, "can't convert name to email")
+	}
+	return eml, nil
+}
+
 func NameFromEmail(e string) (string, error) {
 	parts := strings.Split(e, "@")
 	if len(parts) != 2 {
